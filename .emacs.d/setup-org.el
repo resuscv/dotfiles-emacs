@@ -6,6 +6,7 @@
 ;;; [4] https://github.com/cjohansen/.emacs.d/blob/master/setup-org.el
 ;;; [5] http://orgmode.org/manual/TODO-dependencies.html
 ;;; [6] http://orgmode.org/worg/org-configs/org-customization-guide.html
+;;; [7] http://orgmode.org/manual/Block-agenda.html
 
 ;; Standard key bindings  [1]
 (global-set-key "\C-cl" 'org-store-link)
@@ -32,12 +33,13 @@
 (setq org-tag-alist '((:startgroup . nil)
 		      ("work" . ?w) ("home" . ?h)
 		      (:endgroup . nil)
-		      ("@computer" . ?c) ("@phone" . ?p) ("@reading" . ?r)
+		      ("@computer" . ?c) ("@email" . ?e) ("@desk" . ?d)
 		      (:newline . nil)
-		      ("@desk" . ?d) ("@email" . ?e) ("@meeting" . ?m)
+		      ("@reading" . ?r) ("@meeting_phone" . ?m)
 		      (:newline . nil)
-		      ("@SQL" . ?1) ("@R" . ?2) ("@Matlab" . ?3)))
-
+		      ("maintenance" . nil)
+		      (:newline . nil)
+		      ("coding" . ?1)))
 
 
 ;; Update cookies [4]
@@ -57,11 +59,37 @@
 
 ;; Enforce TODO behaviour
 (setq org-enforce-todo-dependencies t)
+(setq org-track-ordered-property-with-tag t)
+(setq org-agenda-dim-blocked-tasks t)
+(setq org-agenda-include-all-todo nil)
 
+
+;; Agenda setup
+(setq org-agenda-skip-scheduled-if-done t)
+(setq org-agenda-skip-deadline-if-done t)
+(setq org-agenda-todo-ignore-scheduled t)
 
 ;; Hide those stars
 (setq org-startup-indented t)
 
+
+;; Custom agenda - weekly agenda and global TODO
+(setq org-agenda-custom-commands
+      '(("h" "Agenda and Home-related tasks"
+	 ((agenda "")
+	  (tags-todo "home")
+;	  (tags "garden")
+	  ))
+	("w" "Agenda and Office-related tasks"
+	 ((agenda "")
+	  (tags-todo "@email+work")
+	  (tags-todo "@computer+work")
+	  (tags-todo "@coding+work")
+	  (tags-todo "@desk+work")
+	  (tags-todo "@reading+work")
+	  (tags-todo "@meeting_phone+work")
+	  (tags-todo "work-@email-@computer-@coding-@desk-@reading-@meeting_phone")
+	  ))))
 
 ;; Almost END
 (provide 'setup-org)
