@@ -1,4 +1,4 @@
-;;; Org Mode
+;; Org Mode
 ;;;
 ;;; [1] http://doc.norang.ca/org-mode.html
 ;;; [2] https://github.com/purcell/emacs.d/blob/master/init-org.el
@@ -19,7 +19,7 @@
 ;      org-completion-use-ido t
       org-edit-timestamp-down-means-later t
       org-agenda-start-on-weekday nil
-      org-agenda-span 14
+      org-agenda-span 8                                 ;; Show one day ahead next week
       org-agenda-include-diary t
       org-agenda-window-setup 'current-window
  ;     org-fast-tag-selection-single-key 'expert        ;;  I don't know what these mean
@@ -31,7 +31,7 @@
 	      (sequence "WAITING(w@/!)" "SOMEDAY(S)" "PROJECT(P@)" "|" "CANCELLED(c@/!)"))))
 
 (setq org-tag-alist '((:startgroup . nil)
-		      ("work" . ?w) ("home" . ?h)
+		      ("work" . ?w) ("home" . ?h) ("other_organisations" . ?o)
 		      (:endgroup . nil)
 		      ("@computer" . ?c) ("@email" . ?e) ("@desk" . ?d)
 		      (:newline . nil)
@@ -52,16 +52,62 @@
 
 ;; Set up org directories, like agenda [3, 6]
 (setq org-directory "~/Documents/org")
-(setq org-agenda-files (quote ("~/Documents/org"
-			       "~/Documents/org/personal"
-			       "~/Documents/org/work-main")))
+(setq org-agenda-files (quote ("~/Documents/org")))
 
 
+;; Capture setup
+(setq org-default-notes-file (concat org-directory "/notes.org"))
+(define-key global-map "\C-cc" 'org-capture)
+
+;; Enforce TODO behaviour
+(setq org-enforce-todo-dependencies t)
+(setq org-track-ordered-property-with-tag t)
+(setq org-agenda-dim-blocked-tasks 'invisible)
+(setq org-agenda-include-all-todo nil)
+
+
+;; Agenda setup
+(setq org-agenda-skip-scheduled-if-done t)
+(setq org-agenda-skip-deadline-if-done t)
+(setq org-agenda-todo-ignore-scheduled t)
+(setq org-agenda-todo-ignore-scheduled 'future)
+;; For tag searches ignore tasks with scheduled and deadline dates
+(setq org-agenda-tags-todo-honor-ignore-options t)
+
+;; Hide those stars
+(setq org-startup-indented t)
+
+(setq org-startup-folded 'overview)
+
+;; Custom agenda - weekly agenda and global TODO
+(setq org-agenda-custom-commands
+      '(("h" "Agenda and Home-related tasks"
+	 ((agenda "")
+	  (tags-todo "home")
+;	  (tags "garden")
+	  (tags-todo "other_organisations")
+	  ))
+	("w" "Agenda and Office-related tasks"
+	 (
+	  (tags-todo "@email+work")
+	  (tags-todo "@computer+work")
+	  (tags-todo "@coding+work")
+	  (tags-todo "@desk+work")
+	  (tags-todo "@reading+work")
+	  (tags-todo "@meeting_phone+work")
+	  (tags-todo "work-@email-@computer-@coding-@desk-@reading-@meeting_phone")
+	  (tags-todo "other_organisations")
+	  (agenda "")
+	  ))))
+
+
+
+;;;;;;;;;;
 ;; MobileOrg
 (require 'org-mobile)
-(setq org-mobile-directory "~/Documents/org/MobileOrg")
+(setq org-mobile-directory (concat org-directory "/MobileOrg"))
 ;; Set to the name of the file where new notes will be stored
-(setq org-mobile-inbox-for-pull "~/Documents/org/mobile-new.org")
+(setq org-mobile-inbox-for-pull (concat org-directory "/mobile-new.org"))
 
 (defvar org-mobile-push-timer nil)
 
@@ -100,40 +146,6 @@
 ;; (ie. dropbox bugs)
 (run-with-timer 0 (* 5 60) 'org-mobile-pull)
 
-
-;; Enforce TODO behaviour
-(setq org-enforce-todo-dependencies t)
-(setq org-track-ordered-property-with-tag t)
-(setq org-agenda-dim-blocked-tasks t)
-(setq org-agenda-include-all-todo nil)
-
-
-;; Agenda setup
-(setq org-agenda-skip-scheduled-if-done t)
-(setq org-agenda-skip-deadline-if-done t)
-(setq org-agenda-todo-ignore-scheduled t)
-
-;; Hide those stars
-(setq org-startup-indented t)
-
-
-;; Custom agenda - weekly agenda and global TODO
-(setq org-agenda-custom-commands
-      '(("h" "Agenda and Home-related tasks"
-	 ((agenda "")
-	  (tags-todo "home")
-;	  (tags "garden")
-	  ))
-	("w" "Agenda and Office-related tasks"
-	 ((agenda "")
-	  (tags-todo "@email+work")
-	  (tags-todo "@computer+work")
-	  (tags-todo "@coding+work")
-	  (tags-todo "@desk+work")
-	  (tags-todo "@reading+work")
-	  (tags-todo "@meeting_phone+work")
-	  (tags-todo "work-@email-@computer-@coding-@desk-@reading-@meeting_phone")
-	  ))))
 
 ;; Almost END
 (provide 'setup-org)
