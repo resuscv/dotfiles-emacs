@@ -35,7 +35,7 @@
 		      (:endgroup . nil)
 		      ("@computer" . ?c) ("@email" . ?e) ("@desk" . ?d)
 		      (:newline . nil)
-		      ("@reading" . ?r) ("@meeting_phone" . ?m)
+		      ("@reading" . ?r) ("@meeting_phone" . ?m) ("@shopping" . ?s)
 		      (:newline . nil)
 		      ("maintenance" . nil)
 		      (:newline . nil)
@@ -82,23 +82,35 @@
 ;; Custom agenda - weekly agenda and global TODO
 (setq org-agenda-custom-commands
       '(("h" "Agenda and Home-related tasks"
-	 ((agenda "")
-	  (tags-todo "home")
+	 (
+	  (tags-todo "@email+home/TODO")
+	  (tags-todo "@computer+home/TODO")
+	  (tags-todo "@desk+home/TODO")
+	  (tags-todo "@reading+home/TODO")
+	  (tags-todo "@meeting_phone+home/TODO")
+	  (tags-todo "@shopping+home/TODO")
+	  (tags-todo "@maintenance+home/TODO")
+	  (tags-todo "-{@+}+home/TODO")
+	  (tags-todo "home/-TODO")
 ;	  (tags "garden")
 	  (tags-todo "other_organisations")
+	  (agenda "")
 	  ))
 	("w" "Agenda and Office-related tasks"
 	 (
-	  (tags-todo "@email+work")
-	  (tags-todo "@computer+work")
-	  (tags-todo "@coding+work")
-	  (tags-todo "@desk+work")
-	  (tags-todo "@reading+work")
-	  (tags-todo "@meeting_phone+work")
-	  (tags-todo "work-@email-@computer-@coding-@desk-@reading-@meeting_phone")
+;	  (tags-todo "@email+work/TODO" ((org-agenda-overriding-header "Context: @email")))
+	  (tags-todo "@email+work/TODO")
+	  (tags-todo "@computer+work/TODO")
+	  (tags-todo "coding+work/TODO")
+	  (tags-todo "@desk+work/TODO")
+	  (tags-todo "@reading+work/TODO")
+	  (tags-todo "@meeting_phone+work/TODO")
+	  (tags-todo "work-{@+}-coding/TODO")
+	  (tags-todo "work/-TODO")
 	  (tags-todo "other_organisations")
 	  (agenda "")
-	  ))))
+	  ))
+	))
 
 
 
