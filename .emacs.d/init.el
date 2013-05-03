@@ -11,4 +11,5 @@
 ;; Load configs for specific features and modes
 ;;----------------------------------------------------------------------------
 
+(require 'setup-ido)
 (require 'setup-org)
