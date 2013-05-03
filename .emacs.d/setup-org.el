@@ -8,6 +8,13 @@
 ;;; [6] http://orgmode.org/worg/org-configs/org-customization-guide.html
 ;;; [7] http://orgmode.org/manual/Block-agenda.html
 
+
+;; Use the git version of org-mode
+(add-to-list 'load-path (expand-file-name "~/software/git/org-mode/lisp"))
+(add-to-list 'auto-mode-alist '("\\.\\(org\\|org_archive\\|txt\\)$" . org-mode))
+(require 'org)
+
+
 ;; Standard key bindings  [1]
 (global-set-key "\C-cl" 'org-store-link)
 (global-set-key "\C-ca" 'org-agenda)
@@ -24,7 +31,12 @@
       org-agenda-window-setup 'current-window
  ;     org-fast-tag-selection-single-key 'expert        ;;  I don't know what these mean
  ;     org-export-kill-product-buffer-when-displayed t  ;;  I don't know what these mean
-      org-tags-column 80)
+      org-tags-column 80
+      org-use-fast-todo-selection t
+      org-treat-S-cursor-todo-selection-as-state-change nil
+      )
+
+
 
 (setq org-todo-keywords
       (quote ((sequence "TODO(t)" "STARTED(s)" "|" "DONE(d!/!)")
@@ -110,6 +122,19 @@
 	  (tags-todo "other_organisations")
 	  (agenda "")
 	  ))
+  ("q" "All standard contexts"
+   (
+    (tags-todo "@email")
+    (tags-todo "@computer")
+    (tags-todo "coding")
+    (tags-todo "@desk")
+    (tags-todo "@reading")
+    (tags-todo "@meeting_phone")
+    (tags-todo "@shopping")
+    (tags-todo "@maintenance")
+    (tags-todo "-{@+}")
+    (agenda "")
+    ))
 	))
 
 
