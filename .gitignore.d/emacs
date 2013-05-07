@@ -1,3 +1,4 @@
 *
 !.emacs.d/init.el
+!.emacs.d/setup-ido.el
 !.emacs.d/setup-org.el
