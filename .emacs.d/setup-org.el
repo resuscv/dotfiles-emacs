@@ -10,7 +10,7 @@
 
 
 ;; Use the git version of org-mode
-(add-to-list 'load-path (expand-file-name "~/software/git/org-mode/lisp"))
+(add-to-list 'load-path (expand-file-name "~/software/git/org-mode/lisp/"))
 (add-to-list 'Info-default-directory-list "~/software/git/org-mode/doc")
 (add-to-list 'auto-mode-alist '("\\.\\(org\\|org_archive\\|txt\\)$" . org-mode))
 (require 'org)
@@ -99,6 +99,8 @@
               ("NEXT" ("WAITING") ("CANCELLED") ("HOLD"))
               ("DONE" ("WAITING") ("CANCELLED") ("HOLD")))))
 
+;; Change the repeat-todo-state to NEXT rather than TODO
+(setq org-todo-repeat-to-state "NEXT")
 
 ;; Set up org directories, like agenda [3, 6]
 (setq org-directory "~/Documents/org")
@@ -176,28 +178,74 @@
                 (org-agenda-sorting-strategy
                  '(todo-state-down effort-up category-keep))))
               (" " "Agenda"
-               (;;(agenda "" nil)
+               (
                 (tags "REFILE"
                       ((org-agenda-overriding-header "Tasks to Refile")
                        (org-tags-match-list-sublevels nil)))
                 (tags-todo "-CANCELLED/!"
                            ((org-agenda-overriding-header "Stuck Projects")
                             (org-agenda-skip-function 'bh/skip-non-stuck-projects)))
-                (tags-todo "-WAITING-CANCELLED/!NEXT"
-                           ((org-agenda-overriding-header "Next Tasks")
+                ;; (tags-todo "-WAITING-CANCELLED/!NEXT"
+                ;;            ((org-agenda-overriding-header "Next Tasks")
+                ;;             (org-agenda-skip-function 'bh/skip-projects-and-habits-and-single-tasks)
+                ;;             (org-agenda-todo-ignore-scheduled 'future)
+                ;;             (org-agenda-todo-ignore-deadlines 'future)
+                ;;             (org-tags-match-list-sublevels t)
+                ;;             (org-agenda-sorting-strategy
+                ;;              '(todo-state-down effort-up category-keep))))
+                (tags-todo "-WAITING-CANCELLED+@computer/!NEXT"
+                           ((org-agenda-overriding-header "Next Tasks: @computer")
                             (org-agenda-skip-function 'bh/skip-projects-and-habits-and-single-tasks)
-                            (org-agenda-todo-ignore-scheduled t)
-                            (org-agenda-todo-ignore-deadlines t)
-                            (org-agenda-todo-ignore-with-date t)
+                            (org-agenda-todo-ignore-scheduled 'future)
+                            (org-agenda-todo-ignore-deadlines 'future)
+                            (org-tags-match-list-sublevels t)
+                            (org-agenda-sorting-strategy
+                             '(todo-state-down effort-up category-keep))))
+                (tags-todo "-WAITING-CANCELLED+@email/!NEXT"
+                           ((org-agenda-overriding-header "Next Tasks: @email")
+                            (org-agenda-skip-function 'bh/skip-projects-and-habits-and-single-tasks)
+                            (org-agenda-todo-ignore-scheduled 'future)
+                            (org-agenda-todo-ignore-deadlines 'future)
+                            (org-tags-match-list-sublevels t)
+                            (org-agenda-sorting-strategy
+                             '(todo-state-down effort-up category-keep))))
+                (tags-todo "-WAITING-CANCELLED+@desk/!NEXT"
+                           ((org-agenda-overriding-header "Next Tasks: @desk")
+                            (org-agenda-skip-function 'bh/skip-projects-and-habits-and-single-tasks)
+                            (org-agenda-todo-ignore-scheduled 'future)
+                            (org-agenda-todo-ignore-deadlines 'future)
+                            (org-tags-match-list-sublevels t)
+                            (org-agenda-sorting-strategy
+                             '(todo-state-down effort-up category-keep))))
+                (tags-todo "-WAITING-CANCELLED+@reading/!NEXT"
+                           ((org-agenda-overriding-header "Next Tasks: @reading")
+                            (org-agenda-skip-function 'bh/skip-projects-and-habits-and-single-tasks)
+                            (org-agenda-todo-ignore-scheduled 'future)
+                            (org-agenda-todo-ignore-deadlines 'future)
+                            (org-tags-match-list-sublevels t)
+                            (org-agenda-sorting-strategy
+                             '(todo-state-down effort-up category-keep))))
+                (tags-todo "-WAITING-CANCELLED+@meeting_phone/!NEXT"
+                           ((org-agenda-overriding-header "Next Tasks: @meeting_phone")
+                            (org-agenda-skip-function 'bh/skip-projects-and-habits-and-single-tasks)
+                            (org-agenda-todo-ignore-scheduled 'future)
+                            (org-agenda-todo-ignore-deadlines 'future)
+                            (org-tags-match-list-sublevels t)
+                            (org-agenda-sorting-strategy
+                             '(todo-state-down effort-up category-keep))))
+                (tags-todo "-WAITING-CANCELLED-@computer-@email-@desk-@reading-@meeting_phone/!NEXT"
+                           ((org-agenda-overriding-header "Next Tasks: Rest")
+                            (org-agenda-skip-function 'bh/skip-projects-and-habits-and-single-tasks)
+                            (org-agenda-todo-ignore-scheduled 'future)
+                            (org-agenda-todo-ignore-deadlines 'future)
                             (org-tags-match-list-sublevels t)
                             (org-agenda-sorting-strategy
                              '(todo-state-down effort-up category-keep))))
                 (tags-todo "-REFILE-CANCELLED/!-HOLD-WAITING"
                            ((org-agenda-overriding-header "Tasks")
                             (org-agenda-skip-function 'bh/skip-project-tasks-maybe)
-                            (org-agenda-todo-ignore-scheduled t)
-                            (org-agenda-todo-ignore-deadlines t)
-                            (org-agenda-todo-ignore-with-date t)
+                            (org-agenda-todo-ignore-scheduled 'future)
+                            (org-agenda-todo-ignore-deadlines 'future)
                             (org-agenda-sorting-strategy
                              '(category-keep))))
                 (tags-todo "-HOLD-CANCELLED/!"
@@ -214,7 +262,9 @@
                 (tags "-REFILE/"
                       ((org-agenda-overriding-header "Tasks to Archive")
                        (org-agenda-skip-function 'bh/skip-non-archivable-tasks)
-                       (org-tags-match-list-sublevels nil))))
+                       (org-tags-match-list-sublevels nil)))
+		;; (agenda "" nil)
+		)
                nil)
               ("r" "Tasks to Refile" tags "REFILE"
                ((org-agenda-overriding-header "Tasks to Refile")
@@ -225,9 +275,8 @@
               ("n" "Next Tasks" tags-todo "-WAITING-CANCELLED/!NEXT"
                ((org-agenda-overriding-header "Next Tasks")
                 (org-agenda-skip-function 'bh/skip-projects-and-habits-and-single-tasks)
-                (org-agenda-todo-ignore-scheduled t)
-                (org-agenda-todo-ignore-deadlines t)
-                (org-agenda-todo-ignore-with-date t)
+                (org-agenda-todo-ignore-scheduled 'future)
+                (org-agenda-todo-ignore-deadlines 'future)
                 (org-tags-match-list-sublevels t)
                 (org-agenda-sorting-strategy
                  '(todo-state-down effort-up category-keep))))
@@ -515,7 +564,8 @@ When not restricted, skip project and sub-project tasks, habits, and project rel
 
 
 ; Enable habit tracking (and a bunch of other modules)
-(setq org-modules (quote (org-bibtex
+(setq org-modules (quote (org-attach
+			  org-bibtex
                           org-crypt
 			  org-id
                           org-info
@@ -533,7 +583,8 @@ When not restricted, skip project and sub-project tasks, habits, and project rel
 ; position the habit graph on the agenda to the right of the default
 (setq org-habit-graph-column 50)
 
-
+;; Attachments
+(require 'org-attach)
 
 
 ;; Various preferences [2]
