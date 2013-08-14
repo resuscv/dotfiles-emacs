@@ -210,12 +210,19 @@ Defaulting to `-'."
 	 ;;             (org-tags-match-list-sublevels t)
 	 ;;             (org-agenda-sorting-strategy
 	 ;;              '(todo-state-down effort-up category-keep))))
+	 (tags-todo "-REFILE-CANCELLED+@today/!-HOLD-WAITING"
+		    ((org-agenda-overriding-header "Things to do TODAY")
+		     (org-agenda-skip-function 'bh/skip-project-tasks-maybe)
+		     (org-agenda-todo-ignore-scheduled 'future)
+		     (org-agenda-todo-ignore-deadlines 'future)
+		     (org-agenda-sorting-strategy
+		      '(category-keep))))
 	 , (zin/agenda-test "@computer" '+)
 	 , (zin/agenda-test "@email" '+)
 	 , (zin/agenda-test "@desk" '+)
 	 , (zin/agenda-test "@reading" '+)
 	 , (zin/agenda-test "@meeting_phone" '+)
-	 (tags-todo "-WAITING-CANCELLED-@computer-@email-@desk-@reading-@meeting_phone/!NEXT"
+	 (tags-todo "-WAITING-CANCELLED-@today-@computer-@email-@desk-@reading-@meeting_phone/!NEXT"
 		    ((org-agenda-overriding-header "Next Tasks: Rest")
 		     (org-agenda-skip-function 'bh/skip-projects-and-habits-and-single-tasks)
 		     (org-agenda-todo-ignore-scheduled 'future)
@@ -599,6 +606,7 @@ When not restricted, skip project and sub-project tasks, habits, and project rel
 		      ("work" . ?w)
 		      ("home" . ?h)
 		      ("other_organisations" . ?o)
+		      ("@today" . ?t)
 		      (:endgroup . nil)
 		      ("@computer" . ?c)
 		      ("@email" . ?e)
