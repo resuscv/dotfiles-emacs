@@ -16,3 +16,4 @@
 
 (require 'setup-ido)
 (require 'setup-org)
+(require 'setup-ess)
