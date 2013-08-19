@@ -1,7 +1,9 @@
 ;; Use the git version of ESS
-(add-to-list 'load-path (expand-file-name "~/software/git/ESS/lisp/"))
-(add-to-list 'Info-default-directory-list "~/software/git/ESS/doc")
-(require 'ess-site nil 'noerror)
+(let ((ess-path "~/.emacs.d/src/ess/lisp/"))
+  (add-to-list 'load-path ess-path)
+  (add-to-list 'Info-default-directory-list "~/software/git/ESS/doc")
+  (setq ess-ask-for-ess-directory nil)
+  (require 'ess-site nil 'noerror))
 
 
 ;; Almost END

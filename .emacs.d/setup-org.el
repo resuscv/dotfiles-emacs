@@ -1204,6 +1204,28 @@ Late deadlines first, then scheduled, then non-late deadlines"
 ;; 	))
 
 
+;; Configure Babel to support all languages included in the manuscript
+(org-babel-do-load-languages
+ 'org-babel-load-languages
+ '((dot        . t)
+   (emacs-lisp . t)
+;   (haskell    . t)
+   (org        . t)
+   (perl       . t)
+   (python     . t)
+   (R          . t)
+;   (ruby       . t)
+   (sh         . t)
+   (sqlite     . t)))
+(setq org-confirm-babel-evaluate nil)
+
+
+;; Set default header arguments for the Org-mode blocks used to
+;; showcase example Org-mode syntax.
+(setq org-babel-default-header-args:org '((:results . "raw silent")
+                                          (:exports . "code")))
+
+
 
 ;;;;;;;;;;
 ;; MobileOrg
