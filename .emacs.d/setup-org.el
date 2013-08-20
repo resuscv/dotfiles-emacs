@@ -212,7 +212,7 @@ Defaulting to `-'."
 	 ;;             (org-tags-match-list-sublevels t)
 	 ;;             (org-agenda-sorting-strategy
 	 ;;              '(todo-state-down effort-up category-keep))))
-	 (tags-todo "-REFILE-CANCELLED+@today/!-HOLD-WAITING"
+	 (tags-todo "-CANCELLED+@today/!-HOLD-WAITING"
 		    ((org-agenda-overriding-header "Things to do TODAY")
 		     (org-agenda-skip-function 'bh/skip-project-tasks-maybe)
 		     (org-agenda-todo-ignore-scheduled 'future)
