@@ -11,6 +11,7 @@
 
 ;; Use the git version of org-mode
 (add-to-list 'load-path (expand-file-name "~/software/git/org-mode/lisp/"))
+(add-to-list 'load-path (expand-file-name "~/software/git/org-mode/contrib/lisp/"))
 (add-to-list 'Info-default-directory-list "~/software/git/org-mode/doc")
 (add-to-list 'auto-mode-alist '("\\.\\(org\\|org_archive\\|txt\\)$" . org-mode))
 (require 'org)
@@ -581,7 +582,8 @@ When not restricted, skip project and sub-project tasks, habits, and project rel
 
 ;; Attachments
 (require 'org-attach)
-
+;; TODO dependencies  http://orgmode.org/worg/org-contrib/org-depend.html
+(require 'org-depend)
 
 ;; Various preferences [2]
 (setq org-log-done t
