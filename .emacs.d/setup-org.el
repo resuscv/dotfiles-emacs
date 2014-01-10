@@ -1217,7 +1217,7 @@ Late deadlines first, then scheduled, then non-late deadlines"
    (python     . t)
    (R          . t)
 ;   (ruby       . t)
-   (sh         . t)
+   (shell      . t)
    (sqlite     . t)))
 (setq org-confirm-babel-evaluate nil)
 
