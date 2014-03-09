@@ -26,6 +26,6 @@
 ;; Load configs for specific features and modes
 ;;----------------------------------------------------------------------------
 
-(require 'setup-ido)
-(require 'setup-org)
-(require 'setup-ess)
+(require 'ido-setup)
+(require 'org-setup)
+(require 'ess-setup)

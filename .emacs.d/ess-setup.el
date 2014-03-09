@@ -19,4 +19,4 @@
      ))
 
 ;; Almost END
-(provide 'setup-ess)
+(provide 'ess-setup)

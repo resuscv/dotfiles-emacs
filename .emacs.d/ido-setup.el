@@ -2,4 +2,4 @@
 (ido-mode t)
 
 ;; Almost END
-(provide 'setup-ido)
+(provide 'ido-setup)

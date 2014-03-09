@@ -1243,8 +1243,8 @@ Late deadlines first, then scheduled, then non-late deadlines"
 ;; MobileOrg
 ;;
 ;; If you want the MobileOrg setup to run, symlink 'setup-org-mobile-NO-RUN.el' to 'setup-org-mobile.el'
-(require 'setup-org-mobile nil 'noerror)
+(require 'org-setup-mobile nil 'noerror)
 
 
 ;; Almost END
-(provide 'setup-org)
+(provide 'org-setup)

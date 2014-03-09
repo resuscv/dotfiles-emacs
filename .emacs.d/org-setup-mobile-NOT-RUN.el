@@ -46,4 +46,4 @@
 
 
 ;; Almost END
-(provide 'setup-org-mobile)
+(provide 'org-setup-mobile)
