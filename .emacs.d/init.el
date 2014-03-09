@@ -20,7 +20,7 @@
 
 ;; As emacsclient doesn't get the terminal background colour, it doesn't correctly set org-face
 ;; so org-startup-indented doesn't work properly.  So go old school and just start the server.
-(server-start)
+;(server-start)
 
 ;;----------------------------------------------------------------------------
 ;; Load configs for specific features and modes
