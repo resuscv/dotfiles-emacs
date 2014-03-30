@@ -1241,6 +1241,10 @@ Late deadlines first, then scheduled, then non-late deadlines"
                                           (:exports . "code")))
 
 
+;;;;;;;;;;
+;; Local configurations
+(require 'org-setup-local nil 'noerror)
+
 
 ;;;;;;;;;;
 ;; MobileOrg
