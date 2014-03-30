@@ -290,11 +290,29 @@ Also mobileorg barfs at all my agenda settings.  :-("
 	 (org-agenda-skip-function 'bh/skip-project-tasks-maybe)
 	 (org-agenda-sorting-strategy
 	  '(category-keep))))
-       ("p" "Projects" tags-todo "-HOLD-CANCELLED/!"
-	((org-agenda-overriding-header "Projects")
-	 (org-agenda-skip-function 'bh/skip-non-projects)
+;       ("p" "Projects" tags-todo "-HOLD-CANCELLED/!"
+;	((org-agenda-overriding-header "Projects")
+;	 (org-agenda-skip-function 'bh/skip-non-projects)
+;	 (org-agenda-sorting-strategy
+;	  '(category-keep))))
+       ("p" "All active projects"
+	tags-todo "-SOMEDAY-MAYBE"
+	(
+	 (org-agenda-overriding-header "All active projects")
+	 (org-agenda-skip-function 'tnsb/skip-subprojects)  ;; not quite right.  Ignores done projects
 	 (org-agenda-sorting-strategy
-	  '(category-keep))))
+	  '(category-keep))
+	 )
+	)
+       ("P" "All someday/maybe projects"
+	tags-todo "+SOMEDAY+MAYBE"
+	(
+	 (org-agenda-overriding-header "All someday/maybe projects")
+	 (org-agenda-skip-function 'tnsb/skip-subprojects)  ;; not quite right.  Ignores done projects
+	 (org-agenda-sorting-strategy
+	  '(category-keep))
+	 )
+	)
        ("w" "Waiting Tasks" tags-todo "-CANCELLED+WAITING/!"
 	((org-agenda-overriding-header "Waiting and Postponed tasks"))
 	(org-tags-match-list-sublevels nil))
@@ -533,6 +551,13 @@ When not restricted, skip project and sub-project tasks, habits, and project rel
   "Skip trees that are not projects"
   (let ((next-headline (save-excursion (outline-next-heading))))
     (if (bh/is-subproject-p)
+        nil
+      next-headline)))
+
+(defun tnsb/skip-subprojects ()
+  "Skip trees that are subprojects"
+  (let ((next-headline (save-excursion (outline-next-heading))))
+    (if (not (bh/is-subproject-p))
         nil
       next-headline)))
 
