@@ -18,6 +18,7 @@
 
 
 ;; Standard key bindings  [1]
+(global-set-key (kbd "<f12>") 'org-agenda)
 (global-set-key "\C-cl" 'org-store-link)
 (global-set-key "\C-ca" 'org-agenda)
 (global-set-key "\C-cb" 'org-iswitchb)
@@ -184,7 +185,7 @@ Defaulting to `-'."
         ((org-agenda-overriding-header ,(format "Next Tasks: %s%s" sign tag))
          (org-agenda-skip-function 'bh/skip-projects-and-habits-and-single-tasks)
          (org-agenda-todo-ignore-scheduled 'future)
-         (org-agenda-todo-ignore-deadlines 'future)
+         ;(org-agenda-todo-ignore-deadlines 'future)
          (org-tags-match-list-sublevels t)
          (org-agenda-sorting-strategy
           '(todo-state-down effort-up category-keep))))))
@@ -200,6 +201,7 @@ Also mobileorg barfs at all my agenda settings.  :-("
 ;  (let ((sign (if signp "+" "-")))
   (let ((tag (if tagp tagp "")))
     `(
+      (agenda "" nil)
       (tags ,(format "REFILE%s" tag)
 	    ((org-agenda-overriding-header "Tasks to Refile")
 	     (org-tags-match-list-sublevels nil)))
@@ -210,7 +212,7 @@ Also mobileorg barfs at all my agenda settings.  :-("
 		 ((org-agenda-overriding-header "Things to do TODAY")
 		  (org-agenda-skip-function 'bh/skip-project-tasks-maybe)
 		  (org-agenda-todo-ignore-scheduled 'future)
-		  (org-agenda-todo-ignore-deadlines 'future)
+		  ;(org-agenda-todo-ignore-deadlines 'future)
 		  (org-agenda-sorting-strategy
 		   '(category-keep))))
       , (zin/agenda-test "@computer" '+ tag)
@@ -222,7 +224,7 @@ Also mobileorg barfs at all my agenda settings.  :-("
 		 ((org-agenda-overriding-header "Next Tasks: Rest")
 		  (org-agenda-skip-function 'bh/skip-projects-and-habits-and-single-tasks)
 		  (org-agenda-todo-ignore-scheduled 'future)
-		  (org-agenda-todo-ignore-deadlines 'future)
+		  ;(org-agenda-todo-ignore-deadlines 'future)
 		  (org-tags-match-list-sublevels t)
 		  (org-agenda-sorting-strategy
 		   '(todo-state-down effort-up category-keep))))
@@ -230,7 +232,7 @@ Also mobileorg barfs at all my agenda settings.  :-("
 		 ((org-agenda-overriding-header "Tasks")
 		  (org-agenda-skip-function 'bh/skip-project-tasks-maybe)
 		  (org-agenda-todo-ignore-scheduled 'future)
-		  (org-agenda-todo-ignore-deadlines 'future)
+		  ;(org-agenda-todo-ignore-deadlines 'future)
 		  (org-agenda-sorting-strategy
 		   '(category-keep))))
       (tags-todo ,(format "-HOLD-CANCELLED%s/!" tag)
@@ -243,7 +245,8 @@ Also mobileorg barfs at all my agenda settings.  :-("
 		  (org-agenda-skip-function 'bh/skip-stuck-projects)
 		  (org-tags-match-list-sublevels nil)
 		  (org-agenda-todo-ignore-scheduled 'future)
-		  (org-agenda-todo-ignore-deadlines 'future)))
+		  ;(org-agenda-todo-ignore-deadlines 'future)
+		  ))
       (tags ,(format "-REFILE%s/" tag)
 	    ((org-agenda-overriding-header "Tasks to Archive")
 	     (org-agenda-skip-function 'bh/skip-non-archivable-tasks)
@@ -278,7 +281,7 @@ Also mobileorg barfs at all my agenda settings.  :-("
 	((org-agenda-overriding-header "Next Tasks")
 	 (org-agenda-skip-function 'bh/skip-projects-and-habits-and-single-tasks)
 	 (org-agenda-todo-ignore-scheduled 'future)
-	 (org-agenda-todo-ignore-deadlines 'future)
+	 ;(org-agenda-todo-ignore-deadlines 'future)
 	 (org-tags-match-list-sublevels t)
 	 (org-agenda-sorting-strategy
 	  '(todo-state-down effort-up category-keep))))
