@@ -644,7 +644,7 @@ When not restricted, skip project and sub-project tasks, habits, and project rel
 ;      (quote ((sequence "TODO(t)" "STARTED(s)" "|" "DONE(d!/!)")
 ;	      (sequence "WAITING(w@/!)" "SOMEDAY(S)" "PROJECT(P@)" "|" "CANCELLED(c@/!)"))))
 
-(setq org-tag-alist '((:startgroup . nil)
+(setq org-tag-persistent-alist '((:startgroup . nil)
 		      ("work" . ?w)
 		      ("home" . ?h)
 		      ("other_organisations" . ?o)
@@ -656,7 +656,7 @@ When not restricted, skip project and sub-project tasks, habits, and project rel
                       (:newline . nil)
 		      ("@reading" . ?r)
 		      ("@meeting_phone" . ?m)
-                      ("coding" . ?1)
+                      ("coding" . ?x)
                       (:newline . nil)
 		      ("@shopping" . ?s)
 		      ("@maintenance" . nil)

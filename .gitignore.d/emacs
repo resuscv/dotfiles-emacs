@@ -1,7 +1,7 @@
 *
-!.emacs.d/ess-setup.el
-!.emacs.d/ido-setup.el
+!.emacs.d/lisp/ess-setup.el
+!.emacs.d/lisp/ido-setup.el
 !.emacs.d/init.el
-!.emacs.d/org-setup.el
-!.emacs.d/org-setup-mobile-NOT-RUN.el
+!.emacs.d/lisp/org-setup.el
+!.emacs.d/lisp/org-setup-mobile-NOT-RUN.el
 !.gitignore.d/emacs
