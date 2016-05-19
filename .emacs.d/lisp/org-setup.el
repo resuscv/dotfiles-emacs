@@ -15,7 +15,11 @@
 (add-to-list 'Info-default-directory-list "~/software/git/org-mode/doc")
 (add-to-list 'auto-mode-alist '("\\.\\(org\\|org_archive\\|txt\\)$" . org-mode))
 (require 'org)
-
+(require 'ox-odt)
+(require 'ox-taskjuggler)
+;;; http://orgmode.org/worg/org-hacks.html#orgheadline90
+(require 'ox-extra)
+(ox-extras-activate '(ignore-headlines))
 
 ;; Standard key bindings  [1]
 (global-set-key (kbd "<f12>") 'org-agenda)
@@ -79,13 +83,14 @@
 
 (setq org-todo-keywords
       (quote ((sequence "TODO(t)" "NEXT(n)" "|" "DONE(d)")
-              (sequence "WAITING(w@/!)" "HOLD(h@/!)" "|" "CANCELLED(c@/!)" "PHONE"))))
+              (sequence "WAITING(w@/!)" "HOLD(h@/!)" "DELEGATED(z@/!)" "|" "CANCELLED(c@/!)" "PHONE"))))
 
 (setq org-todo-keyword-faces
       (quote (("TODO" :foreground "red" :weight bold)
               ("NEXT" :foreground "blue" :weight bold)
               ("DONE" :foreground "forest green" :weight bold)
               ("WAITING" :foreground "orange" :weight bold)
+              ("DELEGATED" :foreground "brown4" :weight bold)
               ("HOLD" :foreground "magenta" :weight bold)
               ("CANCELLED" :foreground "forest green" :weight bold)
               ("PHONE" :foreground "forest green" :weight bold))))
@@ -94,12 +99,13 @@
 
 (setq org-todo-state-tags-triggers
       (quote (("CANCELLED" ("CANCELLED" . t))
-              ("WAITING" ("WAITING" . t))
+              ("WAITING" ("WAITING" . t) ("DELEGATED"))
+              ("DELEGATED" ("DELEGATED" . t) ("WAITING"))
               ("HOLD" ("WAITING" . t) ("HOLD" . t))
-              (done ("WAITING") ("HOLD"))
-              ("TODO" ("WAITING") ("CANCELLED") ("HOLD"))
-              ("NEXT" ("WAITING") ("CANCELLED") ("HOLD"))
-              ("DONE" ("WAITING") ("CANCELLED") ("HOLD")))))
+              (done ("WAITING") ("DELEGATED") ("HOLD"))
+              ("TODO" ("WAITING") ("DELEGATED") ("CANCELLED") ("HOLD"))
+              ("NEXT" ("WAITING") ("DELEGATED") ("CANCELLED") ("HOLD"))
+              ("DONE" ("WAITING") ("DELEGATED") ("CANCELLED") ("HOLD")))))
 
 ;; Change the repeat-todo-state to NEXT rather than TODO
 (setq org-todo-repeat-to-state "NEXT")
@@ -179,7 +185,7 @@ SIGNP determines whether to use `+' or `-' when adding the tag.
 tagBp is additional filtering that we don't show on the description line.
 Defaulting to `-'."
   (let ((sign (if signp "+" "-")) (tagB (if tagBp tagBp "")))
-    `(tags-todo ,(format "-WAITING-CANCELLED%s%s%s/!NEXT" sign tag tagB)
+    `(tags-todo ,(format "-WAITING-DELEGATED-CANCELLED%s%s%s/!NEXT" sign tag tagB)
 	;; Use the following if you want to see the (optional) additional tag.
 	;; ((org-agenda-overriding-header ,(format "Next Tasks: %s%s   (%s)" sign tag tagB))
         ((org-agenda-overriding-header ,(format "Next Tasks: %s%s" sign tag))
@@ -208,7 +214,7 @@ Also mobileorg barfs at all my agenda settings.  :-("
       (tags-todo ,(format "-CANCELLED%s/!" tag)
 		 ((org-agenda-overriding-header "Stuck Projects")
 		  (org-agenda-skip-function 'bh/skip-non-stuck-projects)))
-      (tags-todo ,(format "-CANCELLED%s+@today/!-HOLD-WAITING" tag)
+      (tags-todo ,(format "-CANCELLED%s+@today/!-HOLD-WAITING-DELEGATED" tag)
 		 ((org-agenda-overriding-header "Things to do TODAY")
 		  (org-agenda-skip-function 'bh/skip-project-tasks-maybe)
 		  (org-agenda-todo-ignore-scheduled 'future)
@@ -220,7 +226,7 @@ Also mobileorg barfs at all my agenda settings.  :-("
       , (zin/agenda-test "@desk" '+ tag)
       , (zin/agenda-test "@reading" '+ tag)
       , (zin/agenda-test "@meeting_phone" '+ tag)
-      (tags-todo ,(format "-WAITING-CANCELLED%s-@today-@computer-@email-@desk-@reading-@meeting_phone/!NEXT" tag)
+      (tags-todo ,(format "-WAITING-DELEGATED-CANCELLED%s-@today-@computer-@email-@desk-@reading-@meeting_phone/!NEXT" tag)
 		 ((org-agenda-overriding-header "Next Tasks: Rest")
 		  (org-agenda-skip-function 'bh/skip-projects-and-habits-and-single-tasks)
 		  (org-agenda-todo-ignore-scheduled 'future)
@@ -228,7 +234,7 @@ Also mobileorg barfs at all my agenda settings.  :-("
 		  (org-tags-match-list-sublevels t)
 		  (org-agenda-sorting-strategy
 		   '(todo-state-down effort-up category-keep))))
-      (tags-todo ,(format "-REFILE-CANCELLED%s/!-HOLD-WAITING" tag)
+      (tags-todo ,(format "-REFILE-CANCELLED%s/!-HOLD-WAITING-DELEGATED" tag)
 		 ((org-agenda-overriding-header "Tasks")
 		  (org-agenda-skip-function 'bh/skip-project-tasks-maybe)
 		  (org-agenda-todo-ignore-scheduled 'future)
@@ -242,6 +248,13 @@ Also mobileorg barfs at all my agenda settings.  :-("
 		   '(category-keep))))
       (tags-todo ,(format "-CANCELLED+WAITING%s/!" tag)
 		 ((org-agenda-overriding-header "Waiting and Postponed Tasks")
+		  (org-agenda-skip-function 'bh/skip-stuck-projects)
+		  (org-tags-match-list-sublevels nil)
+		  (org-agenda-todo-ignore-scheduled 'future)
+		  ;(org-agenda-todo-ignore-deadlines 'future)
+		  ))
+      (tags-todo ,(format "-CANCELLED+DELEGATED%s/!" tag)
+		 ((org-agenda-overriding-header "Delegated Tasks")
 		  (org-agenda-skip-function 'bh/skip-stuck-projects)
 		  (org-tags-match-list-sublevels nil)
 		  (org-agenda-todo-ignore-scheduled 'future)
@@ -277,7 +290,7 @@ Also mobileorg barfs at all my agenda settings.  :-("
        ("#" "Stuck Projects" tags-todo "-CANCELLED/!"
 	((org-agenda-overriding-header "Stuck Projects")
 	 (org-agenda-skip-function 'bh/skip-non-stuck-projects)))
-       ("n" "Next Tasks" tags-todo "-WAITING-CANCELLED/!NEXT"
+       ("n" "Next Tasks" tags-todo "-WAITING-DELEGATED-CANCELLED/!NEXT"
 	((org-agenda-overriding-header "Next Tasks")
 	 (org-agenda-skip-function 'bh/skip-projects-and-habits-and-single-tasks)
 	 (org-agenda-todo-ignore-scheduled 'future)
@@ -285,7 +298,7 @@ Also mobileorg barfs at all my agenda settings.  :-("
 	 (org-tags-match-list-sublevels t)
 	 (org-agenda-sorting-strategy
 	  '(todo-state-down effort-up category-keep))))
-       ("R" "Tasks" tags-todo "-REFILE-CANCELLED/!-HOLD-WAITING"
+       ("R" "Tasks" tags-todo "-REFILE-CANCELLED/!-HOLD-WAITING-DELEGATED"
 	((org-agenda-overriding-header "Tasks")
 	 (org-agenda-skip-function 'bh/skip-project-tasks-maybe)
 	 (org-agenda-sorting-strategy
@@ -315,6 +328,9 @@ Also mobileorg barfs at all my agenda settings.  :-("
 	)
        ("w" "Waiting Tasks" tags-todo "-CANCELLED+WAITING/!"
 	((org-agenda-overriding-header "Waiting and Postponed tasks"))
+	(org-tags-match-list-sublevels nil))
+       ("d" "Delegated Tasks" tags-todo "-CANCELLED+DELEGATED/!"
+	((org-agenda-overriding-header "Delegated tasks"))
 	(org-tags-match-list-sublevels nil))
        ("A" "Tasks to Archive" tags "-REFILE/"
 	((org-agenda-overriding-header "Tasks to Archive")
@@ -437,7 +453,7 @@ Callers of this function already widen the buffer view."
             (save-excursion
               (forward-line 1)
               (while (and (not has-next) (< (point) subtree-end) (re-search-forward "^\\*+ NEXT " subtree-end t))
-                (unless (member "WAITING" (org-get-tags-at))
+                (unless (or (member "WAITING" (org-get-tags-at)) (member "DELEGATED" (org-get-tags-at)))
                   (setq has-next t))))
             (if has-next
                 nil
@@ -456,7 +472,7 @@ Callers of this function already widen the buffer view."
             (save-excursion
               (forward-line 1)
               (while (and (not has-next) (< (point) subtree-end) (re-search-forward "^\\*+ NEXT " subtree-end t))
-                (unless (member "WAITING" (org-get-tags-at))
+                (unless (or (member "WAITING" (org-get-tags-at)) (member "DELEGATED" (org-get-tags-at)))
                   (setq has-next t))))
             (if has-next
                 next-headline
