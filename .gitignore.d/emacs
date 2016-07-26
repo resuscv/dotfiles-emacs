@@ -2,6 +2,7 @@
 !.emacs.d/lisp/epa-setup.el
 !.emacs.d/lisp/ess-setup.el
 !.emacs.d/lisp/ido-setup.el
+!.emacs.d/lisp/misc-functions.el
 !.emacs.d/init.el
 !.emacs.d/lisp/org-setup.el
 !.emacs.d/lisp/org-setup-mobile-NOT-RUN.el

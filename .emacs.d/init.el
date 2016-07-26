@@ -37,6 +37,7 @@
 ;; Load configs for specific features and modes
 ;;----------------------------------------------------------------------------
 
+(require 'misc-functions)
 (require 'epa-setup)
 (require 'ess-setup)
 (require 'ido-setup)
