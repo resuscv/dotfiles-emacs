@@ -192,7 +192,9 @@ Defaulting to `-'."
 	;; Use the following if you want to see the (optional) additional tag.
 	;; ((org-agenda-overriding-header ,(format "Next Tasks: %s%s   (%s)" sign tag tagB))
         ((org-agenda-overriding-header ,(format "Next Tasks: %s%s" sign tag))
-         (org-agenda-skip-function 'bh/skip-projects-and-habits-and-single-tasks)
+	 ;; I want single tasks to be included
+	 ;;(org-agenda-skip-function 'bh/skip-projects-and-habits-and-single-tasks)
+         (org-agenda-skip-function 'bh/skip-projects-and-habits)
          (org-agenda-todo-ignore-scheduled 'future)
          ;(org-agenda-todo-ignore-deadlines 'future)
          (org-tags-match-list-sublevels t)
