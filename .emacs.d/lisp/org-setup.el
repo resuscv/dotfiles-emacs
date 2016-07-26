@@ -136,7 +136,10 @@
               ("p" "Phone call" entry (file org-default-notes-file)
                "* PHONE %? :PHONE:\n%U")
               ("h" "Habit" entry (file org-default-notes-file)
-               "* NEXT %?\n%U\n%a\nSCHEDULED: %(format-time-string \"<%Y-%m-%d %a .+1d/3d>\")\n:PROPERTIES:\n:STYLE: habit\n:REPEAT_TO_STATE: NEXT\n:END:\n"))))
+               "* NEXT %?\n%U\n%a\nSCHEDULED: %(format-time-string \"<%Y-%m-%d %a .+1d/3d>\")\n:PROPERTIES:\n:STYLE: habit\n:REPEAT_TO_STATE: NEXT\n:END:\n")
+	      ("b" "Blog" entry (file+headline (concat org-directory "/blog.org") "Blog entries")
+	       "* NEXT %?        :blog:%^g\n:PROPERTIES:\n:CREATED: %U\n:ID: %<%Y-%m-%d>-%^{ID - no spaces}\n:END:\n\n" :empty-lines 1)
+	      )))
 
 
 ; Targets include this file and any file contributing to the agenda - up to 9 levels deep
@@ -1280,6 +1283,17 @@ Late deadlines first, then scheduled, then non-late deadlines"
 ;; showcase example Org-mode syntax.
 (setq org-babel-default-header-args:org '((:results . "raw silent")
                                           (:exports . "code")))
+
+
+;; I want to log the times when things happen
+; This is also useful for lazyblorg
+(setq org-log-done (quote time))
+(setq org-log-into-drawer t)
+
+;(defun tnsb/space-to-dash (str)
+;  "Convert spaces to dashes"
+;  (interactive "sEnter string: ")
+;  (print (replace-regexp-in-string " " "-" str)))
 
 
 ;;;;;;;;;;
