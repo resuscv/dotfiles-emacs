@@ -1,4 +1,5 @@
 *
+!.emacs.d/lisp/epa-setup.el
 !.emacs.d/lisp/ess-setup.el
 !.emacs.d/lisp/ido-setup.el
 !.emacs.d/init.el
