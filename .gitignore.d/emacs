@@ -6,4 +6,5 @@
 !.emacs.d/init.el
 !.emacs.d/lisp/org-setup.el
 !.emacs.d/lisp/org-setup-mobile-NOT-RUN.el
+!.emacs.d/notmuch-config.el
 !.gitignore.d/emacs

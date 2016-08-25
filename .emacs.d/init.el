@@ -5,6 +5,9 @@
 (add-to-list 'load-path
 	     (concat user-emacs-directory
 		     (convert-standard-filename "lisp/")))
+(add-to-list 'load-path
+	     (concat user-emacs-directory
+		     (convert-standard-filename "lisp/notmuch-emacs")))
 
 ;; Line wrapping
 (global-visual-line-mode t)
@@ -42,6 +45,7 @@
 (require 'ess-setup)
 (require 'ido-setup)
 (require 'org-setup)
+(require 'notmuch)
 ;!!;;; http://www.skamphausen.de/cgi-bin/ska/taskjuggler-mode
 ;!!;(require 'taskjuggler-mode nil 'noerror)
 ;; Machine specific setups - if they don't exist, don't error
