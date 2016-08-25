@@ -17,6 +17,7 @@
 (require 'org)
 (require 'ox-odt)
 (require 'ox-taskjuggler)
+(setq org-taskjuggler-target-version 3.6)
 ;;; http://orgmode.org/worg/org-hacks.html#orgheadline90
 (require 'ox-extra)
 (ox-extras-activate '(ignore-headlines))
